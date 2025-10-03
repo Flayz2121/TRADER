@@ -1,5 +1,7 @@
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +28,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api',
+    'corsheaders',
+    'rest_framework',
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -59,15 +63,12 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# Ключ LLM (например, OpenAI)
+LLM_API_KEY = "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"
+
+DATABASES = {}  # без БД
+
 
 
 # Password validation
