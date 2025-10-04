@@ -1,5 +1,15 @@
 import requests
-from django.conf import settings
+from pathlib import Path
+import os
+from dotenv import load_dotenv
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# загружаем .env
+load_dotenv(BASE_DIR / ".env")
+
+# LLM
+LLM_API_KEY = os.getenv("LLM_API_KEY")
 
 def query_llm(prompt: str):
     """
@@ -7,7 +17,7 @@ def query_llm(prompt: str):
     """
     url = "https://openrouter.ai/api/v1/chat/completions"
     headers = {
-        "Authorization": f"Bearer {settings.LLM_API_KEY}",
+        "Authorization": f"Bearer {LLM_API_KEY}",
         "Content-Type": "application/json",
     }
     data = {

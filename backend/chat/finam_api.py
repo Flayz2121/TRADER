@@ -1,58 +1,74 @@
 import requests
 from django.conf import settings
 
-API_KEY = settings.FINAM_API_KEY
 BASE_URL = "https://api.finam.ru/v1"
 
+def _headers():
+    return {
+        "Authorization": f"Bearer ",
+        "Content-Type": "application/json"
+    }
 
-def get_quote(symbol: str, account_id: str = None):
+def get_accounts():
+    """
+    Получить список аккаунтов — чтобы узнать account_id.
+    """
+    url = f"{BASE_URL}/accounts"
+    try:
+        r = requests.get(url, headers=_headers(), timeout=10)
+        r.raise_for_status()
+        return r.json()
+    except requests.RequestException as e:
+        # Вернуть структуру ошибки, не None
+        return {"error": f"{e}"}
+
+def get_asset(symbol: str, account_id: str = None):
+    """
+    GET /v1/assets/{symbol}
+    """
     url = f"{BASE_URL}/assets/{symbol}"
     params = {}
     if account_id:
         params["account_id"] = account_id
-
-    headers = {"Authorization": f"Bearer {API_KEY}"}
+    elif getattr(settings, "FINAM_ACCOUNT_ID", None):
+        params["account_id"] = settings.FINAM_ACCOUNT_ID
 
     try:
-        r = requests.get(url, headers=headers, params=params)
+        r = requests.get(url, headers=_headers(), params=params or None, timeout=10)
         r.raise_for_status()
         return r.json()
-    except requests.exceptions.RequestException as e:
-        print(f"Ошибка при получении котировки: {e}")
-        return None
+    except requests.RequestException as e:
+        return {"error": f"{e}"}
 
-
-def buy_stock(ticker: str, quantity: int, price: float = None):
+def place_order(symbol: str, quantity: int, operation: str = "BUY", account_id: str = None, price: float = None):
     """
-    Отправка заявки на покупку.
+    POST /v1/orders
+    payload example (adjust per Finam docs):
+    {
+      "account_id": "...",
+      "symbol": "SBER",
+      "quantity": 1,
+      "operation": "BUY",
+      "price": 123.45  # optional for market/order types
+    }
     """
     url = f"{BASE_URL}/orders"
-    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+    acct = account_id or getattr(settings, "FINAM_ACCOUNT_ID", None)
+    if not acct:
+        return {"error": "account_id is required to place orders."}
+
     payload = {
-        "operation": "BUY",
-        "symbol": ticker,
+        "account_id": acct,
+        "symbol": symbol,
         "quantity": quantity,
-        "price": price,
+        "operation": operation.upper()
     }
+    if price is not None:
+        payload["price"] = price
 
-    r = requests.post(url, headers=headers, json=payload)
-    r.raise_for_status()
-    return r.json()
-
-
-def sell_stock(ticker: str, quantity: int, price: float = None):
-    """
-    Отправка заявки на продажу.
-    """
-    url = f"{BASE_URL}/orders"
-    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
-    payload = {
-        "operation": "SELL",
-        "symbol": ticker,
-        "quantity": quantity,
-        "price": price,
-    }
-
-    r = requests.post(url, headers=headers, json=payload)
-    r.raise_for_status()
-    return r.json()
+    try:
+        r = requests.post(url, headers=_headers(), json=payload, timeout=10)
+        r.raise_for_status()
+        return r.json()
+    except requests.RequestException as e:
+        return {"error": f"{e}"}
