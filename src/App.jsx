@@ -158,7 +158,7 @@ function App() {
         setIsProcessing(true);
 
         // 2. ФОРМИРОВАНИЕ ПАЙЛОАДА ДЛЯ OPENAI API
-        const systemInstruction = `Ты — эксперт по анализу запросов трейдеров. Твоя задача — проанализировать запрос пользователя и ответить **ЧИСТЫМ JSON-объектом**.
+        const systemInstruction = `Ты — эксперт по всем вопросам. Твоя задача — проанализировать запрос пользователя и ответить **ЧИСТЫМ JSON-объектом**.
 
         1. Если запрос — это **торговая команда** (купить, продать) или запрос данных (котировки, портфель, история, стакан), используй следующую структуру:
         {"type": "TRADE_COMMAND", "data": {"operation": "BUY" | "SELL" | "QUOTE" | "PORTFOLIO" | "CANDLES" | "ORDER_BOOK" | "OTHER_INFO", "ticker": "SBER" | null, "quantity": 10 | null, "price": 170.5 | null}}

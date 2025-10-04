@@ -2,12 +2,12 @@
    1. ГЛОБАЛЬНЫЕ НАСТРОЙКИ И ПЕРЕМЕННЫЕ
 ========================================================================= */
 :root {
-  --color-bg-primary: #111827;
-  --color-bg-secondary: #1f2937;
-  --color-bg-tertiary: #000000;
+  --color-bg-primary: rgb(33, 33, 33);
+  --color-bg-secondary: rgb(20, 20, 20);
+  --color-bg-tertiary: rgb(24, 24, 24);
   --color-text-primary: #f3f4f6;
   --color-text-secondary: #9ca3af;
-  --color-border: #374151;
+  --color-border: rgb(55, 65, 81);
   --color-accent-blue: #3b82f6;
   --color-accent-orange: #f97316;
   --color-success-green: #4ade80;
@@ -100,7 +100,7 @@ body,
   padding: 0.5rem 0.75rem;
   border-radius: 0.375rem;
   cursor: pointer;
-  color: var(--color-text-secondary);
+  background-color: rgb(24, 24, 24);
   transition: background-color 0.2s;
 }
 .chat-list-item:hover {
@@ -320,7 +320,7 @@ body,
 }
 
 .user-message {
-  background-color: rgba(31, 41, 55, 0.5);
+  background-color: rgba(48, 48, 48);
   border-left: 4px solid var(--color-accent-orange);
   padding: 12px;
   border-radius: 8px;
@@ -343,7 +343,7 @@ body,
 }
 
 .bot-code {
-  background-color: rgba(8, 47, 73, 0.4);
+  background-color: rgba(20, 20, 20);
   border-left: 4px solid var(--color-accent-blue);
   padding: 12px;
   border-radius: 8px;
@@ -354,7 +354,7 @@ body,
 }
 
 .syntax-highlighter-container {
-  background: #1e1e1e;
+  background: rgb(20, 20, 20);
   border-radius: 0.5rem;
   padding: 0.75rem 1rem; /* чуть меньше, чтобы блок не был слишком высоким */
   overflow-x: hidden; /* убираем горизонтальный скролл */
