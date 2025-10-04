@@ -1,0 +1,524 @@
+/* ========================================================================
+   1. ГЛОБАЛЬНЫЕ НАСТРОЙКИ И ПЕРЕМЕННЫЕ
+========================================================================= */
+:root {
+  --color-bg-primary: rgb(33, 33, 33);
+  --color-bg-secondary: rgb(20, 20, 20);
+  --color-bg-tertiary: rgb(24, 24, 24);
+  --color-text-primary: #f3f4f6;
+  --color-text-secondary: #9ca3af;
+  --color-border: rgb(55, 65, 81);
+  --color-accent-blue: #3b82f6;
+  --color-accent-orange: #f97316;
+  --color-success-green: #4ade80;
+  --color-error-red: #dc2626;
+}
+
+
+* {
+  box-sizing: border-box;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Сброс и макет */
+body,
+#root,
+.app-container {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+.flex-1 {
+  flex: 1;
+}
+.space-x-2 > * + * {
+  margin-left: 0.5rem;
+}
+
+/* ========================================================================
+   2. БОКОВАЯ ПАНЕЛЬ (SIDEBAR)
+========================================================================= */
+.sidebar {
+  width: 256px;
+  background-color: var(--color-bg-tertiary);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--color-border);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.sidebar-new-chat-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--color-accent-blue);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  transition: background-color 0.2s;
+}
+.sidebar-new-chat-button:hover {
+  background-color: #2563eb;
+}
+
+.sidebar-chat-list {
+  max-height: 250px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-right: 5px;
+}
+.chat-list-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  background-color: rgb(24, 24, 24);
+  transition: background-color 0.2s;
+}
+.chat-list-item:hover {
+  background-color: rgba(55, 65, 81, 0.5);
+  color: var(--color-text-primary);
+}
+.chat-list-item.active {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  font-weight: 500;
+}
+.chat-list-item span {
+  flex-grow: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.delete-chat-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  margin-left: auto;
+  opacity: 0;
+  transition: all 0.2s;
+}
+.chat-list-item:hover .delete-chat-btn,
+.chat-list-item.active .delete-chat-btn {
+  opacity: 1;
+}
+.delete-chat-btn:hover {
+  color: var(--color-error-red);
+  background-color: rgba(220, 38, 38, 0.2);
+}
+
+.sidebar-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.sidebar-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  color: var(--color-text-primary);
+  transition: background-color 0.2s;
+}
+.sidebar-item svg {
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+.sidebar-item.status-default:hover {
+  background-color: rgba(55, 65, 81, 0.5);
+}
+.sidebar-item.status-connected svg,
+.sidebar-item.status-connected span {
+  color: var(--color-success-green);
+  font-weight: 600;
+}
+
+.sidebar-section {
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  border-top: 1px solid var(--color-border);
+  padding-top: 1rem;
+}
+.sidebar-account-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--color-text-secondary);
+  padding: 0 1rem;
+}
+
+.sidebar-clear-button {
+  width: 100%;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-bg-secondary);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  border: none;
+  color: var(--color-text-primary);
+  transition: background-color 0.2s;
+}
+.sidebar-clear-button:hover {
+  background-color: #374151;
+}
+
+.sidebar-examples-title {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+.sidebar-example-link {
+  display: block;
+  font-size: 0.875rem;
+  color: #60a5fa;
+  text-decoration: none;
+  padding: 0.125rem 0;
+}
+.sidebar-example-link:hover {
+  color: #93c5fd;
+  text-decoration: underline;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+.chat-scroll-area::-webkit-scrollbar,
+.sidebar-chat-list::-webkit-scrollbar {
+  width: 8px;
+}
+.chat-scroll-area::-webkit-scrollbar-thumb,
+.sidebar-chat-list::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 4px;
+}
+.chat-scroll-area::-webkit-scrollbar-track,
+.sidebar-chat-list::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+
+/* ========================================================================
+   3. HEADER
+========================================================================= */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-bg-primary);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.4),
+    0 2px 4px -2px rgba(0, 0, 0, 0.4);
+}
+.header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+.header-subtitle {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+.header-deploy-button {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.header-deploy-button:hover {
+  color: var(--color-text-primary);
+  border-color: var(--color-text-secondary);
+}
+
+/* ========================================================================
+   4. CHAT INTERFACE
+========================================================================= */
+.chat-interface {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.chat-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  overflow: visible;
+}
+.message p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.user-message {
+  background-color: rgba(48, 48, 48);
+  border-left: 4px solid var(--color-accent-orange);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+.bot-text + .user-message,
+.bot-code + .user-message {
+  margin-top: 16px;
+}
+
+.bot-text {
+  background-color: var(--color-bg-secondary);
+  border-left: 4px solid var(--color-accent-blue);
+  padding: 1rem;
+  border-radius: 8px;
+  color: var(--color-text-primary);
+  width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.bot-code {
+  background-color: rgba(20, 20, 20);
+  border-left: 4px solid var(--color-accent-blue);
+  padding: 12px;
+  border-radius: 8px;
+  overflow-x: hidden;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.syntax-highlighter-container {
+  background: rgb(20, 20, 20);
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem; /* чуть меньше, чтобы блок не был слишком высоким */
+  overflow-x: hidden; /* убираем горизонтальный скролл */
+  overflow-y: hidden; /* не ограничиваем высоту вертикально */
+  white-space: pre-wrap; /* перенос длинных строк */
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  display: inline-block; /* ключевой момент — контейнер подстраивается под контент */
+  width: 100%; /* занимает всю ширину родителя */
+}
+
+.syntax-highlighter-container pre {
+  background-color: rgb(20, 20, 20) !important;
+  margin: 0; /* убираем лишние отступы */
+  white-space: pre-wrap !important; /* перенос строк */
+  word-break: break-all !important;
+  box-sizing: border-box;
+}
+
+/* --- API ошибки / успех --- */
+.api-success {
+  width: 100%;
+  background-color: rgba(8, 47, 73, 0.4);
+  border: 1px solid #2563eb;
+  color: #60a5fa;
+  margin-top: 1rem;
+}
+.api-success svg {
+  color: #60a5fa;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+}
+.api-success code {
+  color: var(--color-text-primary);
+  font-family: monospace;
+  background-color: transparent;
+}
+
+.api-error-block {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid var(--color-error-red);
+  border-radius: 0.5rem;
+  background-color: rgba(127, 29, 29, 0.3);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+.api-error-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  color: #f87171;
+  font-weight: 700;
+}
+.api-error-header svg {
+  margin-top: 0.25rem;
+}
+.api-error-details-section {
+  margin-top: 0.75rem;
+}
+.details-toggle-button {
+  font-weight: 600;
+  color: #d1d5db;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.details-toggle-button:hover {
+  color: var(--color-text-primary);
+}
+.arrow {
+  transition: transform 0.2s;
+}
+.arrow.open {
+  transform: rotate(90deg);
+}
+.api-error-interpretation {
+  margin-top: 0.75rem;
+  color: #d1d5db;
+  border-top: 1px solid var(--color-border);
+  padding-top: 0.75rem;
+}
+.api-error-next-steps {
+  margin-top: 0.5rem;
+  color: #facc15;
+  font-weight: 600;
+}
+.api-error-request-info {
+  color: var(--color-text-secondary);
+  font-family: monospace;
+  margin-top: 0.25rem;
+}
+.api-error-followup {
+  margin-top: 0.5rem;
+  color: #d1d5db;
+}
+
+/* ========================================================================
+   5. CHAT INPUT
+========================================================================= */
+.chat-input-container {
+  padding: 1rem 2rem;
+  border-top: 1px solid var(--color-border);
+  backdrop-filter: blur(5px);
+}
+
+.chat-input-wrapper {
+  display: flex;
+  align-items: center;
+  /* Используем более мягкий фон для самого поля */
+  background-color: var(--color-bg-secondary);
+  border-radius: 1rem; /* Сделаем углы более закруглёнными */
+  border: 1px solid var(--color-border);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  padding-right: 0.5rem; /* Отступ для кнопки отправки */
+}
+
+.chat-input-wrapper:focus-within {
+  /* Стильный акцент при фокусе: яркая синяя граница и тень */
+  border-color: var(--color-accent-blue);
+  box-shadow: 0 0 10px var(--color-accent-blue), 0 0 5px rgba(59, 130, 246, 0.5);
+}
+
+.chat-input-field {
+  flex: 1;
+  padding: 1rem 1.25rem; /* Увеличим padding для удобства ввода */
+  background-color: transparent;
+  outline: none;
+  color: var(--color-text-primary);
+  border: none;
+  font-size: 1rem;
+  /* Плавный переход для текста */
+  transition: color 0.3s;
+}
+
+.chat-input-field::placeholder {
+  color: #6b7280;
+  font-style: italic;
+}
+
+.chat-input-send-button {
+  padding: 0.75rem;
+  color: #6b7280; /* приглушённый цвет по умолчанию */
+  transition: color 0.3s, transform 0.1s, filter 0.3s;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0; /* Чтобы кнопка не сжималась */
+
+  /* Добавим небольшое закругление и тень при наведении */
+  border-radius: 0.5rem;
+}
+
+.chat-input-send-button:hover {
+  color: #3b82f6; /* яркий синий при наведении */
+  transform: scale(1.1); /* лёгкое увеличение */
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.chat-input-send-button:active {
+  transform: scale(0.95); /* эффект нажатия */
+}
