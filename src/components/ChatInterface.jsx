@@ -3,7 +3,8 @@ import React, { useRef, useEffect, useState } from 'react';
 import ChatInput from './ChatInput';
 import { FiAperture, FiZap, FiLoader, FiAlertTriangle, FiChevronRight } from 'react-icons/fi';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { darcula } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import darcula from 'react-syntax-highlighter/dist/esm/styles/prism/darcula';
+
 
 // --- Вспомогательные компоненты ---
 

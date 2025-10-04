@@ -368,6 +368,7 @@ body,
 }
 
 .syntax-highlighter-container pre {
+  background-color: rgb(20, 20, 20) !important;
   margin: 0; /* убираем лишние отступы */
   white-space: pre-wrap !important; /* перенос строк */
   word-break: break-all !important;
